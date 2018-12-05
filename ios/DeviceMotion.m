@@ -4,6 +4,7 @@
 
 #import <React/RCTBridge.h>
 #import <React/RCTEventDispatcher.h>
+#include <math.h>
 #import "DeviceMotion.h"
 
 @implementation DeviceMotion
@@ -71,12 +72,26 @@ RCT_EXPORT_METHOD(getData:(RCTResponseSenderBlock) cb) {
     double z = self->_motionManager.deviceMotion.gravity.z;
     double timestamp = self->_motionManager.deviceMotion.timestamp;
     
+    double pitchRadians = atan(z, y);
+    double pitch = (pitchRadians / (M_PI / 180)) + pitchRadians > 0 ? 0 : 360;
+    pitch = 270 - pitch;
+    
+    double yawRadians = atan(y, x);
+    double yaw = (pitchRadians / (M_PI / 180));
+    if (yaw < 0) {
+        yaw = -1 * yaw;
+    } else {
+        yaw = 180 - yaw + 180;
+    }
+    
     NSLog(@"getData: %f, %f, %f, %f", x, y, z, timestamp);
     
     cb(@[[NSNull null], @{
              @"x" : [NSNumber numberWithDouble:x],
              @"y" : [NSNumber numberWithDouble:y],
              @"z" : [NSNumber numberWithDouble:z],
+             @"pitch" : [NSNumber numberWithDouble: pitch],
+             @"yaw" : [NSNumber numberWithDouble: yaw],
              @"timestamp" : [NSNumber numberWithDouble:timestamp]
              }]
        );
