@@ -72,18 +72,22 @@ RCT_EXPORT_METHOD(getData:(RCTResponseSenderBlock) cb) {
     double z = self->_motionManager.deviceMotion.gravity.z;
     double timestamp = self->_motionManager.deviceMotion.timestamp;
     
-    double pitchRadians = atan(z, y);
-    double pitch = (pitchRadians / (M_PI / 180)) + pitchRadians > 0 ? 0 : 360;
-    pitch = 270 - pitch;
+//    double pitchRadians = atan(z, y);
+//    double pitch = (pitchRadians / (M_PI / 180)) + pitchRadians > 0 ? 0 : 360;
+//    pitch = 270 - pitch;
+//
+//    double yawRadians = atan(y, x);
+//    double yaw = (pitchRadians / (M_PI / 180));
+//    if (yaw < 0) {
+//        yaw = -1 * yaw;
+//    } else {
+//        yaw = 180 - yaw + 180;
+//    }
+    double pitchRadians = self -> _motionManager.deviceMotion.attitude.pitch;
+    double yawRadians = self -> _motionManager.deviceMotion.attitude.yaw;
     
-    double yawRadians = atan(y, x);
+    double pitch = (pitchRadians / (M_PI / 180))
     double yaw = (pitchRadians / (M_PI / 180));
-    if (yaw < 0) {
-        yaw = -1 * yaw;
-    } else {
-        yaw = 180 - yaw + 180;
-    }
-    
     NSLog(@"getData: %f, %f, %f, %f, %f, %f", x, y, z, timestamp, pitch, yaw);
     
     cb(@[[NSNull null], @{
@@ -109,20 +113,27 @@ RCT_EXPORT_METHOD(startUpdates) {
          double x = deviceMotion.gravity.x;
          double y = deviceMotion.gravity.y;
          double z = deviceMotion.gravity.z;
+        
          double timestamp = deviceMotion.timestamp;
-         NSLog(@"startDeviceMotionUpdates: %f, %f, %f, %f", x, y, z, timestamp);
+//         NSLog(@"startDeviceMotionUpdates: %f, %f, %f, %f", x, y, z, timestamp);
+//
+//         double pitchRadians = atan(z, y);
+//         double pitch = (pitchRadians / (M_PI / 180)) + pitchRadians > 0 ? 0 : 360;
+//         pitch = 270 - pitch;
+//
+//         double yawRadians = atan(y, x);
+//         double yaw = (pitchRadians / (M_PI / 180));
+//         if (yaw < 0) {
+//             yaw = -1 * yaw;
+//         } else {
+//             yaw = 180 - yaw + 180;
+//         }
+         double pitchRadians = self -> _motionManager.deviceMotion.attitude.pitch;
+         double yawRadians = self -> _motionManager.deviceMotion.attitude.yaw;
          
-         double pitchRadians = atan(z, y);
-         double pitch = (pitchRadians / (M_PI / 180)) + pitchRadians > 0 ? 0 : 360;
-         pitch = 270 - pitch;
-         
-         double yawRadians = atan(y, x);
+         double pitch = (pitchRadians / (M_PI / 180))
          double yaw = (pitchRadians / (M_PI / 180));
-         if (yaw < 0) {
-             yaw = -1 * yaw;
-         } else {
-             yaw = 180 - yaw + 180;
-         }
+         NSLog(@"getData: %f, %f, %f, %f, %f, %f", x, y, z, timestamp, pitch, yaw);
          
          [self.bridge.eventDispatcher sendDeviceEventWithName:@"DeviceMotion" body:@{
                                                                                      @"x" : [NSNumber numberWithDouble:x],
