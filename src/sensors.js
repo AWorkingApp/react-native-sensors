@@ -1,13 +1,14 @@
 import { DeviceEventEmitter } from "react-native";
 import { Observable } from "rxjs";
 import { publish, refCount } from "rxjs/operators";
-import * as RNSensors from "./rnsensors";
+import RNSensors from "./rnsensors";
 
 const listenerKeys = new Map([
   ["accelerometer", "Accelerometer"],
   ["gyroscope", "Gyroscope"],
   ["magnetometer", "Magnetometer"],
-  ["barometer", "Barometer"]
+  ["barometer", "Barometer"],
+  ["deviceMotion", "DeviceMotion"]
 ]);
 
 function createSensorObservable(sensorType) {
@@ -46,10 +47,12 @@ const accelerometer = createSensorObservable("accelerometer");
 const gyroscope = createSensorObservable("gyroscope");
 const magnetometer = createSensorObservable("magnetometer");
 const barometer = createSensorObservable("barometer");
+const deviceMotion = createSensorObservable("deviceMotion");
 
 export default {
   gyroscope,
   accelerometer,
   magnetometer,
-  barometer
+  barometer,
+  deviceMotion
 };
