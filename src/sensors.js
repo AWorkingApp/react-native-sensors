@@ -1,7 +1,7 @@
 import { DeviceEventEmitter } from "react-native";
 import { Observable } from "rxjs";
 import { publish, refCount } from "rxjs/operators";
-import RNSensors from "./rnsensors";
+import * as RNSensors from "./rnsensors";
 
 const listenerKeys = new Map([
   ["accelerometer", "Accelerometer"],
@@ -37,6 +37,7 @@ function createSensorObservable(sensorType) {
     return this.unsubscribeCallback;
   }).pipe(makeSingleton());
 }
+
 
 // As we only have one sensor we need to share it between the different consumers
 function makeSingleton() {
