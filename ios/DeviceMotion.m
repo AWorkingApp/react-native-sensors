@@ -84,7 +84,7 @@ RCT_EXPORT_METHOD(getData:(RCTResponseSenderBlock) cb) {
         yaw = 180 - yaw + 180;
     }
     
-    NSLog(@"getData: %f, %f, %f, %f", x, y, z, timestamp);
+    NSLog(@"getData: %f, %f, %f, %f, %f, %f", x, y, z, timestamp, pitch, yaw);
     
     cb(@[[NSNull null], @{
              @"x" : [NSNumber numberWithDouble:x],
@@ -112,10 +112,24 @@ RCT_EXPORT_METHOD(startUpdates) {
          double timestamp = deviceMotion.timestamp;
          NSLog(@"startDeviceMotionUpdates: %f, %f, %f, %f", x, y, z, timestamp);
          
+         double pitchRadians = atan(z, y);
+         double pitch = (pitchRadians / (M_PI / 180)) + pitchRadians > 0 ? 0 : 360;
+         pitch = 270 - pitch;
+         
+         double yawRadians = atan(y, x);
+         double yaw = (pitchRadians / (M_PI / 180));
+         if (yaw < 0) {
+             yaw = -1 * yaw;
+         } else {
+             yaw = 180 - yaw + 180;
+         }
+         
          [self.bridge.eventDispatcher sendDeviceEventWithName:@"DeviceMotion" body:@{
                                                                                      @"x" : [NSNumber numberWithDouble:x],
                                                                                      @"y" : [NSNumber numberWithDouble:y],
                                                                                      @"z" : [NSNumber numberWithDouble:z],
+                                                                                     @"pitch" : [NSNumber numberWithDouble: pitch],
+                                                                                     @"yaw" : [NSNumber numberWithDouble: yaw],
                                                                                      @"timestamp" : [NSNumber numberWithDouble:timestamp]
                                                                                      }];
      }];
