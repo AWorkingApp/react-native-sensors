@@ -6,7 +6,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
-import android.support.annotation.Nullable;
+
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -66,7 +66,7 @@ public class Gyroscope extends ReactContextBaseJavaModule implements SensorEvent
   }
 
   // SensorEventListener Interface
-  private void sendEvent(String eventName, @Nullable WritableMap params) {
+  private void sendEvent(String eventName,  WritableMap params) {
     try {
       this.reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
         .emit(eventName, params);
